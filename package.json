@@ -1,0 +1,23 @@
+{
+  "name": "fluffy-bank",
+  "version": "1.0.0",
+  "description": "家計簿管理 API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kazu211/fluffy-bank.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kazu211/fluffy-bank/issues"
+  },
+  "homepage": "https://github.com/kazu211/fluffy-bank#readme",
+  "dependencies": {
+    "@types/google-apps-script": "^1.0.57"
+  }
+}
