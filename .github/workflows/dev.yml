@@ -31,7 +31,7 @@ jobs:
 
       - name: Create clasp.json
         run: |
-          echo \{\"scriptId\":\"${{ secrets.SCRIPT_ID_DEV }}\",\"rootDir\":\"./src\"\} > ./.clasp.json
+          echo \{\"scriptId\":\"${{ secrets.SCRIPT_ID_DEV }}\"\} > ./.clasp.json
 
       - name: Get running version
         run: |
