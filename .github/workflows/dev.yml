@@ -1,0 +1,52 @@
+name: Release dev
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install Clasp
+        run: |
+          npm install
+          npm install clasp -g
+
+      - name: Create clasprc.json
+        run: |
+          echo \{\"token\":\{\"access_token\":\"${{ secrets.ACCESS_TOKEN }}\",\"scope\":\"https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/drive.metadata.readonly https://www.googleapis.com/auth/script.projects https://www.googleapis.com/auth/script.webapp.deploy https://www.googleapis.com/auth/logging.read openid https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/script.deployments https://www.googleapis.com/auth/service.management https://www.googleapis.com/auth/cloud-platform\",\"token_type\":\"Bearer\",\"id_token\":\"${{ secrets.ID_TOKEN }}\",\"expiry_date\":1620870307822,\"refresh_token\":\"${{ secrets.REFRESH_TOKEN }}\"\},\"oauth2ClientSettings\":\{\"clientId\":\"${{ secrets.CLIENT_ID }}\",\"clientSecret\":\"${{ secrets.CLIENT_SECRET }}\",\"redirectUri\":\"http://localhost\"\},\"isLocalCreds\":false\} > ~/.clasprc.json
+
+      - name: Create clasp.json
+        run: |
+          echo \{\"scriptId\":\"${{ secrets.SCRIPT_ID_DEV }}\",\"rootDir\":\"./src\"\} > ./.clasp.json
+
+      - name: Get running version
+        run: |
+          echo RUNNING_VERSION="$( clasp deployments | tail -n 1 | awk -F ' ' '{print $3}' )" >> $GITHUB_ENV
+
+      - name: Publish
+        run: clasp push
+
+      - name: Deploy (Only first time)
+        if: env.RUNNING_VERSION == '@HEAD'
+        run: |
+          clasp deploy -d $GITHUB_SHA
+
+      - name: Deploy
+        if: env.RUNNING_VERSION != '@HEAD'
+        run: |
+          DEPLOY_ID=$( clasp deployments | tail -n 1 | awk -F ' ' '{print $2}' )
+          clasp deploy -d $GITHUB_SHA -i ${DEPLOY_ID}
