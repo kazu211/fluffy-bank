@@ -8,6 +8,7 @@ function response(content) {
 function doPost(e) {
   let contents;
   try {
+    log('info', '[doPost] postData=' + e.postData.contents)
     contents = JSON.parse(e.postData.contents);
   } catch (e) {
     log('error', '[doPost] JSONのパースに失敗しました')
