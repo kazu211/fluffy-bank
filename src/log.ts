@@ -1,15 +1,9 @@
-/**
- * ログをシートに記録します
- * @param {String} level
- * @param {String} message
- */
 function log(level: string, message: string) {
-    const logMaxRow = 101;
-    const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('log')!!;
+  const logMaxRow = 101;
 
-    sheet.appendRow([new Date(), level.toUpperCase(), message]);
+  logSheet.appendRow([new Date(), level.toUpperCase(), message]);
 
-    if (logMaxRow < sheet.getLastRow()) {
-        sheet.deleteRow(2);
-    }
+  if (logMaxRow < logSheet.getLastRow()) {
+    logSheet.deleteRow(2);
+  }
 }
