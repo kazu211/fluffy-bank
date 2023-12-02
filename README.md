@@ -33,12 +33,12 @@ $ git push --tags
 
 github Action で clasp を使ってデプロイをするために github の Actions Secrets で設定をします
 
-| Name           | Value                         |
-|----------------|-------------------------------|
-| ACCESS_TOKEN   | clasprc.json > access_token   |
-| CLIENT_ID      | clasprc.json > client_id      |
-| CLIENT_SECRET  | clasprc.json > client_secret  |
-| ID_TOKEN       | clasprc.json > id_token       |
-| REFRESH_TOKEN  | clasprc.json > refresh_token  |
-| SCRIPT_ID_DEV  | SpreadSheet(dev) > script_id  |
-| SCRIPT_ID_PROD | SpreadSheet(prod) > script_id |
+| Name           | Value                          |
+|----------------|--------------------------------|
+| ACCESS_TOKEN   | clasprc.json > access_token    |
+| CLIENT_ID      | clasprc.json > client_id       |
+| CLIENT_SECRET  | clasprc.json > client_secret   |
+| ID_TOKEN       | clasprc.json > id_token        |
+| REFRESH_TOKEN  | clasprc.json > refresh_token   |
+| SCRIPT_ID_DEV  | Apps Script (dev) > script_id  |
+| SCRIPT_ID_PROD | Apps Script (prod) > script_id |
