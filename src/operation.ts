@@ -1,3 +1,5 @@
+import Date = GoogleAppsScript.Base.Date;
+
 function isValid(item: Item): boolean {
   // 日付
   const dateReg = /^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/
@@ -50,37 +52,38 @@ function onPost(params: PostParams): Item | Message {
 }
 
 function onGet(params: GetParams): Item[] {
-  const { start, end } = params;
-
-  const [ startYear, startMonth, startDay ] = start.split('-');
-  const [ endYear, endMonth, endDay ] = end.split('-');
-
-  const startDate = new Date(startYear, Number(startMonth)-1, Number(startDay));
-  const endDate = new Date(endYear, Number(endMonth)-1, Number(endDay));
-
-  const range = budgetSheet.getRange(1, 1, budgetSheet.getLastRow(), 9);
+  const { year, month } = params
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(year)!!
+  const range = sheet.getRange(1, 1, sheet.getLastRow(), 8)
 
   const items = range.getValues().filter(row => {
-    return (startDate <= row[1]) && (row[1] <= endDate)
+    const date = new Date(row[1]);
+
+    // 月の指定がない場合は年だけでフィルタする
+    if (month == null) {
+      return date.getFullYear().toString() == year;
+    } else {
+      return date.getFullYear().toString() == year && (date.getMonth() + 1).toString().padStart(2, '0') == month;
+    }
   }).map(row => {
-    const [id, d, title, category1, category2, tags, income, outgo, memo] = row
-    // TODO: 日付を扱うクラスを作る
-    const date = `${d.getFullYear()}-${(d.getMonth() + 1).toString().padStart(2, '0')}-${d.getDate().toString().padStart(2, '0')}`
+    const [id, d, type, category1, category2, amount, tags, description] = row
+    const date = new Date(d)
+
     return {
       id,
-      date,
-      title,
+      date: `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`,
+      type,
       category1,
       category2,
+      amount,
       tags,
-      income: (income === '') ? null : income,
-      outgo: (outgo === '') ? null : outgo,
-      memo
+      description
     }
   });
 
-  log('info', `[onGet] データを取得しました start: ${start} - end: ${end}`)
-  return items;
+  log('info', `[onGet] ${items.length} 件のデータを取得しました year: ${year}, month: ${month}`)
+
+  return items
 }
 
 function onDelete(params: DeleteParams): Message {

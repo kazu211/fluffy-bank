@@ -4,19 +4,17 @@ interface Item {
   // 日付
   date: string;
   // 収入/支出
-  title: string;
-  // 収支の分類1
+  type: string;
+  // 収支カテゴリ1
   category1: string;
-  // 収支の分類2
+  // 収支カテゴリ2
   category2: string;
-  // 収支の付随情報
+  // タグ情報
   tags: string;
-  // 収入(円)
-  income?: number;
-  // 支出(円)
-  outgo?: number;
-  // 備考
-  memo: string;
+  // 額
+  amount?: number;
+  // 補足
+  description: string;
 }
 
 interface Message {
@@ -25,10 +23,10 @@ interface Message {
 }
 
 interface GetParams {
-  // 取得開始日
-  start: string;
-  // 取得終了日
-  end: string;
+  // 取得年
+  year: string;
+  // 取得月
+  month?: string;
 }
 
 interface PostParams {
