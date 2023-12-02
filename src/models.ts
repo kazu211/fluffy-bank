@@ -12,7 +12,7 @@ interface Item {
   // タグ情報
   tags: string;
   // 額
-  amount?: number;
+  amount: number;
   // 補足
   description: string;
 }

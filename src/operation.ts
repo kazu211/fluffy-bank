@@ -1,54 +1,26 @@
-import Date = GoogleAppsScript.Base.Date;
-
-function isValid(item: Item): boolean {
-  // 日付
-  const dateReg = /^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/
-  if (!dateReg.test(item.date)) {
-    log('warn', `[isValid] item.date が不正な値です ${item.date}`)
-    return false
-  }
-
-  // 収支
-  if (item.income === null && item.outgo === null) {
-    log('warn', `[isValid] income/outgo 両方とも NULL です`)
-    return false
-  }
-  if (item.income !== null && item.outgo !== null) {
-    log('warn', `[isValid] income/outgo 両方とも NOT NULL です income: ${item.income} outgo: ${item.outgo}`)
-    return false
-  }
-  if (item.income !== null && typeof item.income !== 'number') {
-    log('warn', `[isValid] income が数値ではありません income: ${item.income}`)
-    return false
-  }
-  if (item.outgo !== null && typeof item.outgo !== 'number') {
-    log('warn', `[isValid] outgo が数値ではありません outgo: ${item.outgo}`)
-    return false
-  }
-
-  // TODO category1 と category2 の連携が取れていることを確認する
-
-  return true
-}
-
 function onPost(params: PostParams): Item | Message {
   const item = params.item
 
   if (!isValid(item)) {
-    log('warn', `[onPost] 不正なリクエストパラメータです item: ${item}`)
+    log('error', `[onPost] 不正なリクエストパラメータのため登録出来ませんでした`)
     return {
-      error: '不正なリクエストパラメータです'
+      error: '不正なリクエストパラメータのため登録できませんでした'
     };
-  };
+  }
 
-  const { date, title, category1, category2, tags, income, outgo, memo } = item;
+  const { date, type, category1, category2, amount, tags, description } = item;
   const id = Utilities.getUuid();
-  const row = [id, date, title, category1, category2, tags, income, outgo, memo];
+  const row = [ id, date, type, category1, category2, amount, tags, description ];
 
-  budgetSheet.appendRow(row);
+  // TODO: 年シートがない場合の処理
+  const d = new Date(date);
+  const sheetName = d.getFullYear().toString();
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(sheetName)!!
+  sheet.appendRow(row);
 
   log('info', `[onPost] データを追加しました id: ${id}`)
-  return {id, date, title, category1, category2, tags, income, outgo, memo};
+
+  return {id, date, type, category1, category2, tags, amount, description};
 }
 
 function onGet(params: GetParams): Item[] {

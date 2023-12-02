@@ -8,3 +8,22 @@ function runOnGet() {
 
   console.log(items)
 }
+
+function runOnPost() {
+  const params: PostParams = {
+    item: {
+      id: "",
+      date: "2021-09-30",
+      type: "支出",
+      category1: "住宅",
+      category2: "光熱費",
+      amount: 6000,
+      tags: "",
+      description: "電気ガス"
+    },
+  }
+
+  const result = onPost(params);
+
+  console.log(result)
+}
