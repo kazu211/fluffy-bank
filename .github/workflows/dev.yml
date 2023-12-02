@@ -38,6 +38,13 @@ jobs:
       - name: Publish
         run: clasp push -f
 
-      - name: Deploy
+      - name: Deploy (Only first time)
+        if: env.RUNNING_VERSION == '@HEAD'
         run: |
-          clasp deploy -d $GITHUB_SHA -i fluffy_bank_dev
+          clasp deploy -d $GITHUB_SHA
+
+      - name: Deploy
+        if: env.RUNNING_VERSION != '@HEAD'
+        run: |
+          DEPLOY_ID=$( clasp deployments | tail -n 1 | awk -F ' ' '{print $2}' )
+          clasp deploy -d $GITHUB_SHA -i ${DEPLOY_ID}
