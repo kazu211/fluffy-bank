@@ -11,4 +11,3 @@ function setUp() {
 }
 
 const logSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('log')!!;
-const budgetSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('budget')!!;

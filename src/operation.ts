@@ -65,15 +65,15 @@ function onGet(params: GetParams): Item[] {
 function onDelete(params: DeleteParams): Message {
   const id = params.id;
 
-  const [ seq,  year, month, day ] = id.split('-');
+  const [, year,] = id.split('-');
 
   const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(year)!!
   const index = sheet.getRange(1, 1, sheet.getLastRow()).getValues().flat().findIndex(v => v === id);
 
   if (index === -1) {
-    log('warn', `[onDelete] 指定のデータが存在しませんでした id: ${id}`)
+    log('error', `[onDelete] 指定のデータが存在しないため削除できませんでした id: ${id}`)
     return {
-      error: '指定のデータが存在しませんでした'
+      error: '指定のデータが存在しないため削除できませんでした'
     }
   }
 
@@ -89,25 +89,28 @@ function onPut(params: PutParams): Item | Message {
   const item = params.item
 
   if (!isValid(item)) {
-    log('warn', `[onPut] 不正なリクエストパラメータです item: ${item}`)
+    log('error', `[onPut] 不正なリクエストパラメータのため更新出来ませんでした`)
     return {
-      error: '不正なリクエストパラメータです'
+      error: '不正なリクエストパラメータのため更新出来ませんでした'
     };
-  };
+  }
 
-  const { id, date, title, category1, category2, tags, income, outgo, memo } = item;
+  const { id, date, type, category1, category2, amount, tags, description } = item;
 
-  const index = budgetSheet.getRange(1, 1, budgetSheet.getLastRow()).getValues().flat().findIndex(v => v === id);
+  const [, year,] = id.split('-');
+
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(year)!!
+  const index = sheet.getRange(1, 1, sheet.getLastRow()).getValues().flat().findIndex(v => v === id);
 
   if (index === -1) {
-    log('warn', `[onPut] 指定のデータが存在しませんでした id: ${id}`)
+    log('error', `[onPut] 指定のデータが存在しないため更新できませんでした id: ${id}`)
     return {
-      error: '指定のデータが存在しませんでした'
+      error: '指定のデータが存在しないため更新できませんでした'
     }
-  };
+  }
 
-  budgetSheet.getRange(index + 1, 1, 1, 9).setValues([
-    [id, date, title, category1, category2, tags, income, outgo, memo]
+  sheet.getRange(index + 1, 1, 1, 8).setValues([
+    [id, date, type, category1, category2, amount, tags, description]
   ]);
 
   log('info', `[onPut] データを更新しました id: ${id}`)
