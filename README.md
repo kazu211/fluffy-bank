@@ -4,7 +4,9 @@ Google SpreadSheet を DB に見立てて GAS で家計簿情報を取得更新�
 
 GAS + clasp で開発します
 
-## 環境構築
+## 開発
+
+### 環境構築
 
 ```console
 $ nmp i
@@ -28,6 +30,28 @@ $ git push
 $ git tag v1.0.0
 $ git push --tags
 ```
+
+### ローカル
+
+ローカル環境からデプロイする場合は .clasp.json を作成して clasp コマンドを使います
+
+```json
+{"scriptId": "${ScriptId}"}
+```
+
+```console
+$ clasp push
+
+# デプロイ履歴を確認します
+$ clasp deployments
+
+# 最新の DEPLOY_ID を使ってデプロイします
+$ clasp deploy -d ${Comment} -i ${DEPLOY_ID}
+```
+
+※ `DEPLOY_ID` を指定してデプロイしないと API の URL が変わります
+
+clasp push
 
 ## 設定
 
