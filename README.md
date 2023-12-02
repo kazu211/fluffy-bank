@@ -42,3 +42,5 @@ github Action で clasp を使ってデプロイをするために github の Ac
 | REFRESH_TOKEN  | clasprc.json > refresh_token  |
 | SCRIPT_ID_DEV  | SpreadSheet(dev) > script_id  |
 | SCRIPT_ID_PROD | SpreadSheet(prod) > script_id |
+
+※長期間デプロイしていないと再度 clasp の情報を設定し直す必要がありそう

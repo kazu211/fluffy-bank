@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/kazu211/fluffy-bank#readme",
   "dependencies": {
-    "@types/google-apps-script": "^1.0.57"
+    "@types/google-apps-script": "^1.0.57",
+    "clasp": "^1.0.0"
   }
 }
