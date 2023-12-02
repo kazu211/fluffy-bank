@@ -27,3 +27,13 @@ function runOnPost() {
 
   console.log(result)
 }
+
+function runOnDelete() {
+  const params: DeleteParams = {
+    id: "0177-2021-09-30"
+  }
+
+  const result = onDelete(params);
+
+  console.log(result)
+}

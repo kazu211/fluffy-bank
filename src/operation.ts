@@ -9,13 +9,17 @@ function onPost(params: PostParams): Item | Message {
   }
 
   const { date, type, category1, category2, amount, tags, description } = item;
-  const id = Utilities.getUuid();
+
+  const d = new Date(date);
+  const year = d.getFullYear().toString();
+  // TODO: シートがない場合は新しく作る
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(year)!!
+
+  // id は \d{4}-YYYY-MM-DD 形式にする
+  const seq = sheet.getLastRow().toString().padStart(4, '0');
+  const id = `${seq}-${date}`;
   const row = [ id, date, type, category1, category2, amount, tags, description ];
 
-  // TODO: 年シートがない場合の処理
-  const d = new Date(date);
-  const sheetName = d.getFullYear().toString();
-  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(sheetName)!!
   sheet.appendRow(row);
 
   log('info', `[onPost] データを追加しました id: ${id}`)
@@ -61,7 +65,10 @@ function onGet(params: GetParams): Item[] {
 function onDelete(params: DeleteParams): Message {
   const id = params.id;
 
-  const index = budgetSheet.getRange(1, 1, budgetSheet.getLastRow()).getValues().flat().findIndex(v => v === id);
+  const [ seq,  year, month, day ] = id.split('-');
+
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(year)!!
+  const index = sheet.getRange(1, 1, sheet.getLastRow()).getValues().flat().findIndex(v => v === id);
 
   if (index === -1) {
     log('warn', `[onDelete] 指定のデータが存在しませんでした id: ${id}`)
@@ -70,7 +77,7 @@ function onDelete(params: DeleteParams): Message {
     }
   }
 
-  budgetSheet.deleteRow(index + 1)
+  sheet.deleteRow(index + 1)
 
   log('info', `[onDelete] データを削除しました id: ${id}`)
   return {
