@@ -68,3 +68,7 @@ github Action で clasp を使ってデプロイをするために github の Ac
 | REFRESH_TOKEN  | clasprc.json > refresh_token   |
 | SCRIPT_ID_DEV  | Apps Script (dev) > script_id  |
 | SCRIPT_ID_PROD | Apps Script (prod) > script_id |
+
+## Swagger UI
+
+https://kazu211.github.io/fluffy-bank/swagger-ui/
