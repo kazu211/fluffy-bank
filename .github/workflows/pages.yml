@@ -5,12 +5,16 @@ on:
     branches:
       - main
     paths:
-      - openapi.yaml
+      - docs/**
       - .github/workflows/pages.yml
   workflow_dispatch:
 
 jobs:
   deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
@@ -18,14 +22,24 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Generate Swagger UI
-        uses: Legion2/swagger-ui-action@v1
+      - name: Checkout swagger-ui
+        uses: actions/checkout@v3
         with:
-          output: swagger-ui
-          spec-file: openapi.yaml
+          repository: swagger-api/swagger-ui
+          ref: 'v5.10.0'
+          path: swagger-ui
+
+      - name: Inject Swagger static files
+        run: cp -n swagger-ui/dist/* docs/swagger-ui
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v2
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: 'docs'
 
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: swagger-ui
+        id: deployment
+        uses: actions/deploy-pages@v1
