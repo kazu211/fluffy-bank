@@ -1,10 +1,12 @@
 # fluffy-bank
 
-Google SpreadSheet を DB に見立てて GAS で家計簿情報を取得更新する API
+家計簿情報API
 
-GAS + clasp で開発します
+Google Spreadsheet の家計簿情報を取得更新します
 
 ## 開発
+
+GAS + clasp で開発します
 
 ### 環境構築
 

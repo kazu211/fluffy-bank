@@ -1,0 +1,136 @@
+openapi: 3.0.3
+info:
+  title: fluffy-bank
+  version: 1.0.0
+  description: "家計簿データを取得更新するAPI"
+tags:
+  - name: "exec"
+    description: "実行"
+servers:
+  - url: "https://script.google.com/macros/s/{deployId}"
+    description: GAS
+    variables:
+      host:
+        default: localhost
+        enum:
+          - localhost
+
+paths:
+  /exec:
+    post:
+      tags:
+        - "exec"
+      summary: 実行
+      description: GAS はリダイレクトを有効にする必要があります
+      requestBody:
+        description: Request payload
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                method:
+                  type: string
+                  description: HTTP method (GET, POST, PUT, DELETE)
+                  enum: ["GET", "POST", "PUT", "DELETE"]
+                authToken:
+                  type: string
+                  description: Authentication token
+                params:
+                  oneOf:
+                    - $ref: "#/components/schemas/GetParams"
+                    - $ref: "#/components/schemas/PostPutParams"
+                    - $ref: "#/components/schemas/DeleteParams"
+              required:
+                - method
+                - authToken
+                - params
+      responses:
+        "200":
+          description: Action executed successfully
+
+components:
+  schemas:
+    Id:
+      type: string
+      description: "家計簿ID (format: xxxx-YYYY-MM-DD)"
+      example: "0001-2020-05-11"
+
+    Item:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/Id"
+        date:
+          type: string
+          format: date
+          description: "日付"
+          example: "2023-05-11"
+        type:
+          type: string
+          enum: ["収入", "支出"]
+          description: "収入支出"
+          example: "支出"
+        category1:
+          type: string
+          description: "収入支出の分類1"
+          example: "住宅"
+        category2:
+          type: string
+          description: "収入支出の分類2"
+          example: "光熱費"
+        amount:
+          type: number
+          description: "金額"
+          example: 6000
+        tags:
+          type: string
+          description: "属性"
+          example: ""
+        description:
+          type: string
+          description: "補足"
+          example: "電気ガス"
+      required:
+        - id
+        - date
+        - type
+        - category1
+        - category2
+        - amount
+        - tags
+        - description
+
+    GetParams:
+      type: object
+      description: "method: GET"
+      properties:
+        year:
+          type: string
+          description: "年"
+          example: "2022"
+        month:
+          type: string
+          description: "月"
+          example: "05"
+      required:
+        - year
+
+    PostPutParams:
+      type: object
+      description: "method: POST/PUT"
+      properties:
+        item:
+          $ref: "#/components/schemas/Item"
+      required:
+        - item
+
+    DeleteParams:
+      type: object
+      description: "method: DELETE"
+      properties:
+        id:
+          $ref: "#/components/schemas/Id"
+      required:
+        - id
