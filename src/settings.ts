@@ -1,15 +1,11 @@
+// token
 const authToken = PropertiesService.getScriptProperties().getProperty('authToken') || ''
 
-/**
- * トークンをセットするため初回のみ実行してください
- * トークンはローカル保存してください
- */
-function setUp() {
-  PropertiesService.getScriptProperties().setProperties({
-    authToken: 'xxxxx'
-  })
-}
-
+// シート
 const ss = SpreadsheetApp.getActiveSpreadsheet();
+const readmeSheet = ss.getSheetByName('readme')!!;
+const tokenSheet = ss.getSheetByName('token')!!;
+const typeSheet = ss.getSheetByName('type')!!;
+const tagsSheet = ss.getSheetByName('tags')!!;
 const logSheet = ss.getSheetByName('log')!!;
 const tmpSheet = ss.getSheetByName('tmp')!!;
