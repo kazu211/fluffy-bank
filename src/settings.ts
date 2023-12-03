@@ -10,4 +10,6 @@ function setUp() {
   })
 }
 
-const logSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('log')!!;
+const ss = SpreadsheetApp.getActiveSpreadsheet();
+const logSheet = ss.getSheetByName('log')!!;
+const tmpSheet = ss.getSheetByName('tmp')!!;

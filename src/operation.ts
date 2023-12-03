@@ -12,8 +12,15 @@ function onPost(params: PostParams): Item | Message {
 
   const d = new Date(date);
   const year = d.getFullYear().toString();
-  // TODO: シートがない場合は新しく作る
-  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(year)!!
+
+  let sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(year)
+
+  // シートがない場合は新しく作る
+  if (sheet == null) {
+    log('info', `[onPut] 新しいシートを作成しました | sheet: ${year}`)
+    const copy = tmpSheet.copyTo(ss);
+    sheet = copy.setName(year)
+  }
 
   // id は \d{4}-YYYY-MM-DD 形式にする
   const seq = sheet.getLastRow().toString().padStart(4, '0');
@@ -22,14 +29,20 @@ function onPost(params: PostParams): Item | Message {
 
   sheet.appendRow(row);
 
-  log('info', `[onPost] データを追加しました id: ${id}`)
+  log('info', `[onPost] データを追加しました | id: ${id}`)
 
   return {id, date, type, category1, category2, tags, amount, description};
 }
 
 function onGet(params: GetParams): Item[] {
   const { year, month } = params
-  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(year)!!
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(year)
+
+  if (sheet == null) {
+    log('info', `[onGet] シートが存在しませんでした | sheet: ${year}`)
+    return []
+  }
+
   const range = sheet.getRange(1, 1, sheet.getLastRow(), 8)
 
   const items = range.getValues().filter(row => {
@@ -37,9 +50,9 @@ function onGet(params: GetParams): Item[] {
 
     // 月の指定がない場合は年だけでフィルタする
     if (month == null) {
-      return date.getFullYear().toString() == year;
+      return date.getFullYear().toString() === year;
     } else {
-      return date.getFullYear().toString() == year && (date.getMonth() + 1).toString().padStart(2, '0') == month;
+      return date.getFullYear().toString() === year && (date.getMonth() + 1).toString().padStart(2, '0') === month;
     }
   }).map(row => {
     const [id, d, type, category1, category2, amount, tags, description] = row
@@ -57,7 +70,7 @@ function onGet(params: GetParams): Item[] {
     }
   });
 
-  log('info', `[onGet] ${items.length} 件のデータを取得しました year: ${year}, month: ${month}`)
+  log('info', `[onGet] ${items.length} 件のデータを取得しました | year: ${year}, month: ${month}`)
 
   return items
 }
@@ -67,19 +80,27 @@ function onDelete(params: DeleteParams): Message {
 
   const [, year,] = id.split('-');
 
-  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(year)!!
-  const index = sheet.getRange(1, 1, sheet.getLastRow()).getValues().flat().findIndex(v => v === id);
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(year)
 
-  if (index === -1) {
-    log('error', `[onDelete] 指定のデータが存在しないため削除できませんでした id: ${id}`)
+  if (sheet == null) {
+    log('error', `[onDelete] シートが存在しないため削除できませんでした | id: ${id} sheet: ${year}`)
     return {
       error: '指定のデータが存在しないため削除できませんでした'
     }
   }
 
-  sheet.deleteRow(index + 1)
+  const index = sheet.getRange(1, 1, sheet.getLastRow()).getValues().flat().findIndex(v => v === id);
 
-  log('info', `[onDelete] データを削除しました id: ${id}`)
+  if (index === -1) {
+    log('error', `[onDelete] 指定のデータが存在しないため削除できませんでした | id: ${id}`)
+    return {
+      error: '指定のデータが存在しないため削除できませんでした'
+    }
+  }
+
+  sheet!!.deleteRow(index + 1)
+
+  log('info', `[onDelete] データを削除しました | id: ${id}`)
   return {
     info: 'ok'
   }
@@ -99,11 +120,19 @@ function onPut(params: PutParams): Item | Message {
 
   const [, year,] = id.split('-');
 
-  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(year)!!
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(year)
+
+  if (sheet == null) {
+    log('error', `[onPut] シートが存在しないため更新できませんでした | id: ${id} sheet: ${year}`)
+    return {
+      error: '指定のデータが存在しないため更新できませんでした'
+    }
+  }
+
   const index = sheet.getRange(1, 1, sheet.getLastRow()).getValues().flat().findIndex(v => v === id);
 
   if (index === -1) {
-    log('error', `[onPut] 指定のデータが存在しないため更新できませんでした id: ${id}`)
+    log('error', `[onPut] 指定のデータが存在しないため更新できませんでした | id: ${id}`)
     return {
       error: '指定のデータが存在しないため更新できませんでした'
     }
@@ -113,6 +142,6 @@ function onPut(params: PutParams): Item | Message {
     [id, date, type, category1, category2, amount, tags, description]
   ]);
 
-  log('info', `[onPut] データを更新しました id: ${id}`)
+  log('info', `[onPut] データを更新しました | id: ${id}`)
   return item;
 }
