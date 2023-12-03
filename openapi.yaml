@@ -10,7 +10,7 @@ servers:
   - url: "https://script.google.com/macros/s/{deployId}"
     description: GAS
     variables:
-      host:
+      deployId:
         default: localhost
         enum:
           - localhost
