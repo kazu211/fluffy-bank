@@ -18,8 +18,7 @@ interface Item {
 }
 
 interface Message {
-  info?: string;
-  error?: string;
+  error: string;
 }
 
 interface GetParams {
@@ -35,8 +34,8 @@ interface PostParams {
 }
 
 interface DeleteParams {
-  // 削除する収支情報ID
-  id: string;
+  // 削除する収支情報
+  item: Item;
 }
 
 interface PutParams {

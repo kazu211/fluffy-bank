@@ -75,8 +75,9 @@ function onGet(params: GetParams): Item[] {
   return items
 }
 
-function onDelete(params: DeleteParams): Message {
-  const id = params.id;
+function onDelete(params: DeleteParams): Item | Message {
+  const item = params.item;
+  const { id } = item;
 
   const [, year,] = id.split('-');
 
@@ -101,9 +102,7 @@ function onDelete(params: DeleteParams): Message {
   sheet!!.deleteRow(index + 1)
 
   log('info', `[onDelete] データを削除しました | id: ${id}`)
-  return {
-    info: 'ok'
-  }
+  return item
 }
 
 function onPut(params: PutParams): Item | Message {

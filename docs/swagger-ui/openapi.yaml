@@ -12,8 +12,6 @@ servers:
     variables:
       deployId:
         default: localhost
-        enum:
-          - localhost
 
 paths:
   /exec:
@@ -40,8 +38,7 @@ paths:
                 params:
                   oneOf:
                     - $ref: "#/components/schemas/GetParams"
-                    - $ref: "#/components/schemas/PostPutParams"
-                    - $ref: "#/components/schemas/DeleteParams"
+                    - $ref: "#/components/schemas/PostPutDeleteParams"
               required:
                 - method
                 - authToken
@@ -117,20 +114,11 @@ components:
       required:
         - year
 
-    PostPutParams:
+    PostPutDeleteParams:
       type: object
-      description: "method: POST/PUT"
+      description: "method: POST/PUT/DELETE"
       properties:
         item:
           $ref: "#/components/schemas/Item"
       required:
         - item
-
-    DeleteParams:
-      type: object
-      description: "method: DELETE"
-      properties:
-        id:
-          $ref: "#/components/schemas/Id"
-      required:
-        - id

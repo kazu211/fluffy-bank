@@ -1,11 +1,11 @@
-function response(content) {
+function response(content: Item[] | Item | Message) {
   const res = ContentService.createTextOutput();
   res.setMimeType(ContentService.MimeType.JSON);
   res.setContent(JSON.stringify(content));
   return res;
 }
 
-function doPost(e) {
+function doPost(e: GoogleAppsScript.Events.DoPost) {
   let contents;
   try {
     log('info', '[doPost] postData=' + e.postData.contents)
@@ -42,7 +42,7 @@ function doPost(e) {
     }
   } catch (e) {
     log('error', '[doPost] ' + e)
-    result = { error: e };
+    result = { error: String(e) };
   }
 
   return response(result);
