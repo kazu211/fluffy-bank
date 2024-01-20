@@ -18,7 +18,6 @@ function runOnPost() {
       category1: "住宅",
       category2: "光熱費",
       amount: 6000,
-      tags: "",
       description: "電気ガス"
     },
   }
@@ -37,7 +36,6 @@ function runOnDelete() {
       category1: "住宅",
       category2: "光熱費",
       amount: 7500,
-      tags: "",
       description: "水道"
     },
   }
@@ -56,7 +54,6 @@ function runOnPut() {
       category1: "住宅",
       category2: "光熱費",
       amount: 7500,
-      tags: "",
       description: "水道"
     },
   }

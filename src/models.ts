@@ -9,8 +9,6 @@ interface Item {
   category1: string;
   // 収支カテゴリ2
   category2: string;
-  // タグ情報
-  tags: string;
   // 額
   amount: number;
   // 補足

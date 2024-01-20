@@ -23,29 +23,13 @@ function isValidCategory(item: Item): boolean {
   )
 }
 
-function isValidTags(item: Item): boolean {
-  // tags シートにある名称以外はエラーにする
-  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("tags");
-  const range = sheet!!.getRange(1, 1, sheet!!.getLastRow(), 1)!!;
-
-  // タグが空の場合はOK
-  if (item.tags === "") {
-    return true;
-  }
-
-  return range.getValues().some(row => {
-    const [ tag ] = row;
-    return item.tags === tag;
-  })
-}
-
 function isValidAmount(item: Item): boolean {
   // 金額が正でなければエラーにする
   return typeof item.amount === 'number' && item.amount >= 0;
 }
 
 function isValid(item: Item): boolean {
-  const { id, date, type, category1, category2, tags, amount, description } = item
+  const { id, date, type, category1, category2, amount, description } = item
 
   if (!isValidDate(item)) {
     log('error', `[isValid] 不正な日付です | date: ${date}`)
@@ -54,11 +38,6 @@ function isValid(item: Item): boolean {
 
   if (!isValidCategory(item)) {
     log('error', `[isValid] 不正な組み合わせです | type: ${type}, category1: ${category1}, category2: ${category2}`)
-    return false
-  }
-
-  if (!isValidTags(item)) {
-    log('error', `[isValid] 不正なタグです | tags: ${tags}`)
     return false
   }
 

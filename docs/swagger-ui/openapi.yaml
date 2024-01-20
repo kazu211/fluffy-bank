@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: fluffy-bank
-  version: 1.0.0
+  version: 2.0.0
   description: "家計簿データを取得更新するAPI"
 tags:
   - name: "exec"
@@ -81,10 +81,6 @@ components:
           type: number
           description: "金額"
           example: 6000
-        tags:
-          type: string
-          description: "属性"
-          example: ""
         description:
           type: string
           description: "補足"
@@ -96,7 +92,6 @@ components:
         - category1
         - category2
         - amount
-        - tags
         - description
 
     GetParams:

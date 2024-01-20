@@ -8,7 +8,7 @@ function onPost(params: PostParams): Item | Message {
     };
   }
 
-  const { date, type, category1, category2, amount, tags, description } = item;
+  const { date, type, category1, category2, amount, description } = item;
 
   const d = new Date(date);
   const year = d.getFullYear().toString();
@@ -25,13 +25,13 @@ function onPost(params: PostParams): Item | Message {
   // id は \d{4}-YYYY-MM-DD 形式にする
   const seq = sheet.getLastRow().toString().padStart(4, '0');
   const id = `${seq}-${date}`;
-  const row = [ id, date, type, category1, category2, amount, tags, description ];
+  const row = [ id, date, type, category1, category2, amount, description ];
 
   sheet.appendRow(row);
 
   log('info', `[onPost] データを追加しました | id: ${id}`)
 
-  return {id, date, type, category1, category2, tags, amount, description};
+  return {id, date, type, category1, category2, amount, description};
 }
 
 function onGet(params: GetParams): Item[] {
@@ -43,7 +43,7 @@ function onGet(params: GetParams): Item[] {
     return []
   }
 
-  const range = sheet.getRange(1, 1, sheet.getLastRow(), 8)
+  const range = sheet.getRange(1, 1, sheet.getLastRow(), 7)
 
   const items = range.getValues().filter(row => {
     const date = new Date(row[1]);
@@ -55,7 +55,7 @@ function onGet(params: GetParams): Item[] {
       return date.getFullYear().toString() === year && (date.getMonth() + 1).toString().padStart(2, '0') === month;
     }
   }).map(row => {
-    const [id, d, type, category1, category2, amount, tags, description] = row
+    const [id, d, type, category1, category2, amount, description] = row
     const date = new Date(d)
 
     return {
@@ -65,7 +65,6 @@ function onGet(params: GetParams): Item[] {
       category1,
       category2,
       amount,
-      tags,
       description
     }
   });
@@ -115,7 +114,7 @@ function onPut(params: PutParams): Item | Message {
     };
   }
 
-  const { id, date, type, category1, category2, amount, tags, description } = item;
+  const { id, date, type, category1, category2, amount, description } = item;
 
   const [, year,] = id.split('-');
 
@@ -137,8 +136,8 @@ function onPut(params: PutParams): Item | Message {
     }
   }
 
-  sheet.getRange(index + 1, 1, 1, 8).setValues([
-    [id, date, type, category1, category2, amount, tags, description]
+  sheet.getRange(index + 1, 1, 1, 7).setValues([
+    [id, date, type, category1, category2, amount, description]
   ]);
 
   log('info', `[onPut] データを更新しました | id: ${id}`)
