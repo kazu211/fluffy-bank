@@ -22,9 +22,8 @@ function onPost(params: PostParams): Item | Message {
     sheet = copy.setName(year)
   }
 
-  // id は \d{4}-YYYY-MM-DD 形式にする
-  const seq = sheet.getLastRow().toString().padStart(4, '0');
-  const id = `${seq}-${date}`;
+  // id は uuid にする
+  const id = Utilities.getUuid();
   const row = [ id, date, type, category1, category2, amount, description ];
 
   sheet.appendRow(row);

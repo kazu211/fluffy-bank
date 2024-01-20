@@ -12,6 +12,8 @@ servers:
     variables:
       deployId:
         default: localhost
+        enum:
+          - localhost
 
 paths:
   /exec:
@@ -51,8 +53,8 @@ components:
   schemas:
     Id:
       type: string
-      description: "家計簿ID (format: xxxx-YYYY-MM-DD)"
-      example: "0001-2020-05-11"
+      description: "家計簿ID (uuid)"
+      example: "xxxxxxxxxx"
 
     Item:
       type: object
