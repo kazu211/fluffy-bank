@@ -37,14 +37,19 @@ paths:
                 authToken:
                   type: string
                   description: Authentication token
+                path:
+                  type: string
+                  description: /exec 以降につけると認証が必要になるためpropertiesにする
+                  enum: ["/items", "/categories"]
                 params:
+                  description: /items は必須
                   oneOf:
-                    - $ref: "#/components/schemas/GetParams"
-                    - $ref: "#/components/schemas/PostPutDeleteParams"
+                    - $ref: "#/components/schemas/GetItemsParams"
+                    - $ref: "#/components/schemas/PostPutDeleteItemsParams"
               required:
                 - method
                 - authToken
-                - params
+                - path
       responses:
         "200":
           description: Action executed successfully
@@ -55,6 +60,12 @@ components:
       type: string
       description: "家計簿ID (uuid)"
       example: "xxxxxxxxxx"
+
+    Type:
+      type: string
+      enum: ["収入", "支出"]
+      description: "収入支出"
+      example: "支出"
 
     Item:
       type: object
@@ -67,10 +78,7 @@ components:
           description: "日付"
           example: "2023-05-11"
         type:
-          type: string
-          enum: ["収入", "支出"]
-          description: "収入支出"
-          example: "支出"
+          $ref: "#/components/schemas/Type"
         category1:
           type: string
           description: "収入支出の分類1"
@@ -96,7 +104,7 @@ components:
         - amount
         - description
 
-    GetParams:
+    GetItemsParams:
       type: object
       description: "method: GET"
       properties:
@@ -111,7 +119,7 @@ components:
       required:
         - year
 
-    PostPutDeleteParams:
+    PostPutDeleteItemsParams:
       type: object
       description: "method: POST/PUT/DELETE"
       properties:
@@ -119,3 +127,21 @@ components:
           $ref: "#/components/schemas/Item"
       required:
         - item
+
+    Category:
+      type: object
+      properties:
+        type:
+          $ref: "#/components/schemas/Type"
+        category1:
+          type: string
+          description: "収入支出の分類1"
+          example: "住宅"
+        category2:
+          type: string
+          description: "収入支出の分類2"
+          example: "光熱費"
+      required:
+        - type
+        - category1
+        - category2

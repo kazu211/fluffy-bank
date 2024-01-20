@@ -19,24 +19,24 @@ interface Message {
   error: string;
 }
 
-interface GetParams {
+interface GetItemsParams {
   // 取得年
   year: string;
   // 取得月
   month?: string;
 }
 
-interface PostParams {
+interface PostItemsParams {
   // 登録する収支情報
   item: Item;
 }
 
-interface DeleteParams {
+interface DeleteItemsParams {
   // 削除する収支情報
   item: Item;
 }
 
-interface PutParams {
+interface PutItemsParams {
   // 更新する収支情報
   item: Item;
 }

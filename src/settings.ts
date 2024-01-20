@@ -5,6 +5,6 @@ const authToken = PropertiesService.getScriptProperties().getProperty('authToken
 const ss = SpreadsheetApp.getActiveSpreadsheet();
 const readmeSheet = ss.getSheetByName('readme')!!;
 const tokenSheet = ss.getSheetByName('token')!!;
-const typeSheet = ss.getSheetByName('type')!!;
+const categorySheet = ss.getSheetByName('category')!!;
 const logSheet = ss.getSheetByName('log')!!;
 const tmpSheet = ss.getSheetByName('tmp')!!;
