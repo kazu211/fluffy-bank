@@ -13,8 +13,7 @@ function isValidDate(item: Item): boolean {
 
 function isValidCategory(item: Item): boolean {
   // type シートにある type, category1, category2 以外の組み合わせはエラーにする
-  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("type");
-  const range = sheet!!.getRange(1, 1, sheet!!.getLastRow(), 3)!!;
+  const range = categorySheet.getRange(1, 1, categorySheet.getLastRow(), 3)!!;
 
   return range.getValues().some(row => {
       const [ type, category1, category2 ] = row;

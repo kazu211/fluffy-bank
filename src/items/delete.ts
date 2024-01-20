@@ -1,4 +1,4 @@
-function onDeleteItems(params: DeleteItemsParams): Item | Message {
+function deleteItems(params: DeleteItemsParams): Item | Message {
   const item = params.item;
   const { id } = item;
 

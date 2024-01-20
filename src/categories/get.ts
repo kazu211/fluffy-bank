@@ -1,4 +1,4 @@
-function onGetCategories(): Category[] {
+function getCategories(): Category[] {
   const range = categorySheet.getRange(1, 1, categorySheet.getLastRow(), categorySheet.getLastColumn())
 
   const categories = range.getValues().map(row => {

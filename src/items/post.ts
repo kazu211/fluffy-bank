@@ -1,4 +1,4 @@
-function onPostItems(params: PostItemsParams): Item | Message {
+function postItems(params: PostItemsParams): Item | Message {
   const item = params.item
 
   if (!isValid(item)) {

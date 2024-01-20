@@ -1,4 +1,4 @@
-function onGetItems(params: GetItemsParams): Item[] {
+function getItems(params: GetItemsParams): Item[] {
   const { year, month } = params
   const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(year)
 

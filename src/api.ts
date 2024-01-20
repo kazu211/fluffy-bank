@@ -28,16 +28,16 @@ function doPost(e: GoogleAppsScript.Events.DoPost) {
       case '/items':
         switch (method) {
           case 'POST':
-            result = onPostItems(params);
+            result = postItems(params);
             break;
           case 'GET':
-            result = onGetItems(params);
+            result = getItems(params);
             break;
           case 'PUT':
-            result = onPutItems(params);
+            result = putItems(params);
             break;
           case 'DELETE':
-            result = onDeleteItems(params);
+            result = deleteItems(params);
             break;
           default:
             result = { error: 'method の指定が不正です (GET,POST,PUT,DELETE)' };
@@ -46,7 +46,7 @@ function doPost(e: GoogleAppsScript.Events.DoPost) {
       case '/categories':
         switch (method) {
           case 'GET':
-            result = onGetCategories()
+            result = getCategories()
             break;
           default:
             result = { error: 'method の指定が不正です (GET)' };
