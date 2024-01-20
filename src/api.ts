@@ -1,11 +1,11 @@
-function response(content) {
+function response(content: Item[] | Item | Category[] | Message) {
   const res = ContentService.createTextOutput();
   res.setMimeType(ContentService.MimeType.JSON);
   res.setContent(JSON.stringify(content));
   return res;
 }
 
-function doPost(e) {
+function doPost(e: GoogleAppsScript.Events.DoPost) {
   let contents;
   try {
     log('info', '[doPost] postData=' + e.postData.contents)
@@ -20,29 +20,44 @@ function doPost(e) {
     return response({ error: '認証に失敗しました' });
   }
 
-  const { method = '', params = {} } = contents;
+  const { method = '', path = '', params = {} } = contents;
 
   let result;
   try {
-    switch (method) {
-      case 'POST':
-        result = onPost(params);
+    switch (path) {
+      case '/items':
+        switch (method) {
+          case 'POST':
+            result = onPostItems(params);
+            break;
+          case 'GET':
+            result = onGetItems(params);
+            break;
+          case 'PUT':
+            result = onPutItems(params);
+            break;
+          case 'DELETE':
+            result = onDeleteItems(params);
+            break;
+          default:
+            result = { error: 'method の指定が不正です (GET,POST,PUT,DELETE)' };
+        }
         break;
-      case 'GET':
-        result = onGet(params);
-        break;
-      case 'PUT':
-        result = onPut(params);
-        break;
-      case 'DELETE':
-        result = onDelete(params);
+      case '/categories':
+        switch (method) {
+          case 'GET':
+            result = onGetCategories()
+            break;
+          default:
+            result = { error: 'method の指定が不正です (GET)' };
+        }
         break;
       default:
-        result = { error: 'methodの指定がありません' };
+        result = { error: 'path の指定が不正です (/items,/categories)' }
     }
   } catch (e) {
     log('error', '[doPost] ' + e)
-    result = { error: e };
+    result = { error: String(e) };
   }
 
   return response(result);

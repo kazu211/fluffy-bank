@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: fluffy-bank
-  version: 1.0.0
+  version: 2.0.0
   description: "家計簿データを取得更新するAPI"
 tags:
   - name: "exec"
@@ -37,15 +37,19 @@ paths:
                 authToken:
                   type: string
                   description: Authentication token
+                path:
+                  type: string
+                  description: /exec 以降につけると認証が必要になるためpropertiesにする
+                  enum: ["/items", "/categories"]
                 params:
+                  description: /items は必須
                   oneOf:
-                    - $ref: "#/components/schemas/GetParams"
-                    - $ref: "#/components/schemas/PostPutParams"
-                    - $ref: "#/components/schemas/DeleteParams"
+                    - $ref: "#/components/schemas/GetItemsParams"
+                    - $ref: "#/components/schemas/PostPutDeleteItemsParams"
               required:
                 - method
                 - authToken
-                - params
+                - path
       responses:
         "200":
           description: Action executed successfully
@@ -54,8 +58,14 @@ components:
   schemas:
     Id:
       type: string
-      description: "家計簿ID (format: xxxx-YYYY-MM-DD)"
-      example: "0001-2020-05-11"
+      description: "家計簿ID (uuid)"
+      example: "xxxxxxxxxx"
+
+    Type:
+      type: string
+      enum: ["収入", "支出"]
+      description: "収入支出"
+      example: "支出"
 
     Item:
       type: object
@@ -68,10 +78,7 @@ components:
           description: "日付"
           example: "2023-05-11"
         type:
-          type: string
-          enum: ["収入", "支出"]
-          description: "収入支出"
-          example: "支出"
+          $ref: "#/components/schemas/Type"
         category1:
           type: string
           description: "収入支出の分類1"
@@ -84,10 +91,6 @@ components:
           type: number
           description: "金額"
           example: 6000
-        tags:
-          type: string
-          description: "属性"
-          example: ""
         description:
           type: string
           description: "補足"
@@ -99,10 +102,9 @@ components:
         - category1
         - category2
         - amount
-        - tags
         - description
 
-    GetParams:
+    GetItemsParams:
       type: object
       description: "method: GET"
       properties:
@@ -117,20 +119,29 @@ components:
       required:
         - year
 
-    PostPutParams:
+    PostPutDeleteItemsParams:
       type: object
-      description: "method: POST/PUT"
+      description: "method: POST/PUT/DELETE"
       properties:
         item:
           $ref: "#/components/schemas/Item"
       required:
         - item
 
-    DeleteParams:
+    Category:
       type: object
-      description: "method: DELETE"
       properties:
-        id:
-          $ref: "#/components/schemas/Id"
+        type:
+          $ref: "#/components/schemas/Type"
+        category1:
+          type: string
+          description: "収入支出の分類1"
+          example: "住宅"
+        category2:
+          type: string
+          description: "収入支出の分類2"
+          example: "光熱費"
       required:
-        - id
+        - type
+        - category1
+        - category2

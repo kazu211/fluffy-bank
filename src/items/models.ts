@@ -9,8 +9,6 @@ interface Item {
   category1: string;
   // 収支カテゴリ2
   category2: string;
-  // タグ情報
-  tags: string;
   // 額
   amount: number;
   // 補足
@@ -18,28 +16,27 @@ interface Item {
 }
 
 interface Message {
-  info?: string;
-  error?: string;
+  error: string;
 }
 
-interface GetParams {
+interface GetItemsParams {
   // 取得年
   year: string;
   // 取得月
   month?: string;
 }
 
-interface PostParams {
+interface PostItemsParams {
   // 登録する収支情報
   item: Item;
 }
 
-interface DeleteParams {
-  // 削除する収支情報ID
-  id: string;
+interface DeleteItemsParams {
+  // 削除する収支情報
+  item: Item;
 }
 
-interface PutParams {
+interface PutItemsParams {
   // 更新する収支情報
   item: Item;
 }
