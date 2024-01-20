@@ -10,8 +10,8 @@ function putItems(params: PutItemsParams): Item | Message {
 
   const { id, date, type, category1, category2, amount, description } = item;
 
-  const [, year,] = id.split('-');
-
+  // FIXME date の年を変更する場合、シートの参照ができない
+  const [year,,] = date.split('-');
   const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(year)
 
   if (sheet == null) {

@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: fluffy-bank
-  version: 2.0.2
+  version: 2.0.3
   description: "家計簿データを取得更新するAPI"
 tags:
   - name: "exec"

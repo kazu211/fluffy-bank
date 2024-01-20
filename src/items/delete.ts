@@ -1,9 +1,8 @@
 function deleteItems(params: DeleteItemsParams): Item | Message {
   const item = params.item;
-  const { id } = item;
+  const { id, date } = item;
 
-  const [, year,] = id.split('-');
-
+  const [year,,] = date.split('-');
   const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(year)
 
   if (sheet == null) {
