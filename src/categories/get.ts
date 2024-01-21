@@ -1,5 +1,6 @@
 function getCategories(): Category[] {
-  const range = categorySheet.getRange(1, 1, categorySheet.getLastRow(), categorySheet.getLastColumn())
+  // ヘッダー(1行目)は除く
+  const range = categorySheet.getRange(2, 1, categorySheet.getLastRow()-1, categorySheet.getLastColumn())
 
   const categories = range.getValues().map(row => {
     const [type, category1, category2] = row
