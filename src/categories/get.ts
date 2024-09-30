@@ -3,12 +3,14 @@ function getCategories(): Category[] {
   const range = categorySheet.getRange(2, 1, categorySheet.getLastRow()-1, categorySheet.getLastColumn())
 
   const categories = range.getValues().map(row => {
-    const [type, category1, category2] = row
+    const [id ,type, category1, category2, color] = row
 
     return {
+      id,
       type,
       category1,
       category2,
+      color,
     }
   });
 
