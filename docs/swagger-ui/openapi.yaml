@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: fluffy-bank
-  version: 2.0.4
+  version: 2.1.0
   description: "家計簿データを取得更新するAPI"
 tags:
   - name: "exec"
@@ -131,6 +131,10 @@ components:
     Category:
       type: object
       properties:
+        id:
+          type: string
+          description: "分類ID"
+          example: "O01"
         type:
           $ref: "#/components/schemas/Type"
         category1:
@@ -141,7 +145,13 @@ components:
           type: string
           description: "収入支出の分類2"
           example: "光熱費"
+        color:
+          type: string
+          description: "カラーコード"
+          example: "#ff7f7f"
       required:
+        - id
         - type
         - category1
         - category2
+        - color
