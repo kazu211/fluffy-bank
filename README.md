@@ -59,6 +59,8 @@ clasp push
 
 github Action で clasp を使ってデプロイをするために github の Actions Secrets で設定をします
 
+※ 長期間開発していない場合は clasprc.json の内容を更新する必要があります
+
 | Name           | Value                          |
 |----------------|--------------------------------|
 | ACCESS_TOKEN   | clasprc.json > access_token    |
