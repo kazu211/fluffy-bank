@@ -2,9 +2,8 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    paths:
-      - docs/**
-      - .github/workflows/pages.yml
+    tags:
+      - v*
   workflow_dispatch:
 
 permissions:
@@ -23,10 +22,10 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Checkout swagger-ui
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: swagger-api/swagger-ui
           ref: 'v5.10.0'
