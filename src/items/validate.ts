@@ -13,10 +13,10 @@ function isValidDate(item: Item): boolean {
 
 function isValidCategory(item: Item): boolean {
   // type シートにある type, category1, category2 以外の組み合わせはエラーにする
-  const range = categorySheet.getRange(1, 1, categorySheet.getLastRow(), 3)!!;
+  const range = categorySheet.getRange(2, 1, categorySheet.getLastRow(), categorySheet.getLastColumn())!!;
 
   return range.getValues().some(row => {
-      const [ type, category1, category2 ] = row;
+      const [ id, type, category1, category2, color ] = row;
       return item.type === type && item.category1 === category1 && item.category2 === category2;
     }
   )
